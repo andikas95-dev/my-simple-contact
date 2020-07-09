@@ -7,6 +7,7 @@ const initialState = {
     isSuccess: false,
     data: [],
     dataDelete: [],
+    detailContact: [],
 };
 
 export default function reducerContact(state = initialState, action) {
@@ -72,6 +73,52 @@ export default function reducerContact(state = initialState, action) {
             };
         case `${types.ADDCONTACT}_FULFILLED`:
             message.success("Success Add Contact");
+            return {
+                ...state,
+                isLoading: false,
+                isError: false,
+                isSuccess: true,
+            };
+
+        case `${types.DETAILCONTACT}_REJECTED`:
+            return {
+                ...state,
+                isLoading: false,
+                isError: true,
+                isSuccess: false,
+            };
+        case `${types.DETAILCONTACT}_PENDING`:
+            return {
+                ...state,
+                isLoading: true,
+                isError: false,
+                isSuccess: false,
+            };
+        case `${types.DETAILCONTACT}_FULFILLED`:
+            return {
+                ...state,
+                isLoading: false,
+                isError: false,
+                isSuccess: true,
+                detailContact: action.payload.data,
+            };
+
+        case `${types.EDITCONTACT}_REJECTED`:
+            return {
+                ...state,
+                isLoading: false,
+                isError: true,
+                isSuccess: false,
+            };
+        case `${types.EDITCONTACT}_PENDING`:
+            return {
+                ...state,
+                isLoading: true,
+                isError: false,
+                isSuccess: false,
+            };
+        case `${types.EDITCONTACT}_FULFILLED`:
+            message.success("Success Edit Contact");
             return {
                 ...state,
                 isLoading: false,

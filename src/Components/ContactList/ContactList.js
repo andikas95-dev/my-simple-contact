@@ -29,7 +29,7 @@ const ContactList = (props) => {
                         <button
                             type="button"
                             className="btn btn-warning m-2"
-                            // onClick={() => DeleteButton(props.data.id)}
+                            onClick={props.onEdit}
                         >
                             Edit Contact
                         </button>

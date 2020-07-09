@@ -26,3 +26,20 @@ export const AddContact = (data) => ({
         url: `${HOST}/contact`,
     }),
 });
+
+export const DetailContact = (id) => ({
+    type: types.DETAILCONTACT,
+    payload: axios({
+        method: "get",
+        url: `${HOST}/contact/${id}`,
+    }),
+});
+
+export const EditContact = (id, data) => ({
+    type: types.EDITCONTACT,
+    payload: axios({
+        method: "put",
+        data,
+        url: `${HOST}/contact/${id}`,
+    }),
+});

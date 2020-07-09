@@ -16,7 +16,9 @@ const { confirm } = Modal;
 
 class Home extends Component {
     state = {
+        titleModal: "",
         modalNewUserVisible: false,
+        id: "",
         firstName: "",
         lastName: "",
         age: "",
@@ -37,9 +39,7 @@ class Home extends Component {
             onOk: async () => {
                 this.DeleteOk(id);
             },
-            onCancel() {
-                console.log("Cancel");
-            },
+            onCancel() {},
         });
     };
 
@@ -49,32 +49,72 @@ class Home extends Component {
     };
 
     AddNewUser = async () => {
-        const { firstName, lastName, age, photo } = this.state;
+        if (this.state.id !== "") {
+            const { id, firstName, lastName, age, photo } = this.state;
 
-        if (!Number(age)) {
-            message.error("Mohon umur diisi dengan angka");
+            if (!Number(age) && age < 100) {
+                message.error("Mohon umur diisi dengan angka");
+            } else {
+                let data = {
+                    firstName,
+                    lastName,
+                    age,
+                    photo,
+                };
+
+                await this.props.EditContact(id, data);
+                this.setState({
+                    titleModal: "",
+                    modalNewUserVisible: false,
+                    id: "",
+                    firstName: "",
+                    lastName: "",
+                    age: "",
+                });
+                await this.props.GetDataContact();
+            }
         } else {
-            let data = {
-                firstName,
-                lastName,
-                age,
-                photo,
-            };
+            const { firstName, lastName, age, photo } = this.state;
 
-            await this.props.AddContact(data);
-            this.setState({
-                modalNewUserVisible: false,
-                firstName: "",
-                lastName: "",
-                age: "",
-            });
-            await this.props.GetDataContact();
+            if (!Number(age)) {
+                message.error("Mohon umur diisi dengan angka");
+            } else {
+                let data = {
+                    firstName,
+                    lastName,
+                    age,
+                    photo,
+                };
+
+                await this.props.AddContact(data);
+                this.setState({
+                    titleModal: "",
+                    modalNewUserVisible: false,
+                    firstName: "",
+                    lastName: "",
+                    age: "",
+                });
+                await this.props.GetDataContact();
+            }
         }
+    };
+
+    EditUser = async (id) => {
+        await this.props.DetailContact(id);
+
+        const detailContact = this.props.dataContact.detailContact.data;
+        this.setState({
+            titleModal: "Edit Contact",
+            modalNewUserVisible: true,
+            id,
+            firstName: detailContact.firstName,
+            lastName: detailContact.lastName,
+            age: detailContact.age,
+        });
     };
 
     render() {
         const { dataContact } = this.props;
-        console.log(dataContact);
 
         if (dataContact.isLoading === true) {
             return <div>Loading</div>;
@@ -85,16 +125,16 @@ class Home extends Component {
                     <div className="container">
                         <div className="row">
                             {dataContact.data.data !== undefined ? (
-                                dataContact.data.data.map((item, key) => {
+                                dataContact.data.data.map((item) => {
                                     return (
                                         <ContactList
                                             data={item}
                                             key={item.id}
                                             onDelete={() =>
-                                                this.DeleteUser(
-                                                    item.id,
-                                                    item.firstName
-                                                )
+                                                this.DeleteUser(item.id)
+                                            }
+                                            onEdit={() =>
+                                                this.EditUser(item.id)
                                             }
                                         />
                                     );
@@ -108,14 +148,18 @@ class Home extends Component {
                         type="button"
                         className="btn btn-primary btn-lg btn-block fixed-bottom"
                         onClick={() =>
-                            this.setState({ modalNewUserVisible: true })
+                            this.setState({
+                                modalNewUserVisible: true,
+                                titleModal: "Add Contact",
+                            })
                         }
                     >
                         Add Contact
                     </button>
 
+                    {/*------------------------------ MODAL ADD CONTACT ------------------------------*/}
                     <Modal
-                        title="New Contact"
+                        title={this.state.titleModal}
                         visible={this.state.modalNewUserVisible}
                         onOk={() => this.AddNewUser()}
                         onCancel={() =>
@@ -165,6 +209,7 @@ class Home extends Component {
                             </div>
                         </form>
                     </Modal>
+                    {/*------------------------------ END MODAL ADD CONTACT ------------------------------*/}
                 </div>
             );
         }
@@ -181,6 +226,9 @@ const dispatchToProps = (dispatch) => {
         GetDataContact: () => dispatch(actionContact.GetDataContact()),
         DeleteContact: (id) => dispatch(actionContact.DeleteContact(id)),
         AddContact: (data) => dispatch(actionContact.AddContact(data)),
+        DetailContact: (id) => dispatch(actionContact.DetailContact(id)),
+        EditContact: (id, data) =>
+            dispatch(actionContact.EditContact(id, data)),
     };
 };
 
