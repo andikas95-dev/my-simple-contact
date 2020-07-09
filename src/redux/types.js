@@ -1,0 +1,3 @@
+export const GETCONTACT = "GETCONTACT";
+export const DELETECONTACT = "DELETECONTACT";
+export const ADDCONTACT = "ADDCONTACT";

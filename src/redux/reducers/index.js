@@ -1,9 +1,11 @@
 import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
 
+import reducerContact from "./reducerContact";
+
 const appReducers = (history) =>
     combineReducers({
-        // users: reducerUsers,
+        contact: reducerContact,
         router: connectRouter(history),
     });
 

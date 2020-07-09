@@ -1,4 +1,9 @@
 .navbar-custom {
-    background-color: aqua;
+    background-color: #ccc;
     justify-content: center !important;
+}
+
+li.nav-item h2 {
+    font-weight: bold;
+    color: #fff;
 }

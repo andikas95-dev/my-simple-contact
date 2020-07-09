@@ -5,6 +5,7 @@ import configureStore, { history } from "./redux/store";
 import { ConnectedRouter } from "connected-react-router";
 
 import Home from "./Pages/Home";
+// import ContactDetail from "./Pages/ContactDetail";
 
 const store = configureStore();
 
@@ -15,6 +16,11 @@ const App = () => {
                 <BrowserRouter>
                     <Switch>
                         <Route exact path="/" component={Home} />
+                        {/* <Route
+                            exact
+                            path="/contact-detail/:id"
+                            component={ContactDetail}
+                        /> */}
                     </Switch>
                 </BrowserRouter>
             </ConnectedRouter>

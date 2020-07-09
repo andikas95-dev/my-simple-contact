@@ -3,10 +3,10 @@ import "./Header.css";
 
 const Header = () => {
     return (
-        <nav class="navbar navbar-custom">
-            <ul class="nav justify-content-center">
-                <li class="nav-item">
-                    <h3>My Contact</h3>
+        <nav className="navbar navbar-custom">
+            <ul className="nav justify-content-center">
+                <li className="nav-item">
+                    <h2>My Contact</h2>
                 </li>
             </ul>
         </nav>
